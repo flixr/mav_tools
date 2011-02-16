@@ -1,7 +1,7 @@
 <package>
   <description brief="laser_height_estimation">
 
-     laser_height_estimation
+     A tool to measure the distance to the floor/ceiling using a a laser scanner.
 
   </description>
   <author>Ivan Dryanovski</author>
