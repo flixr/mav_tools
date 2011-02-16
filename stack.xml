@@ -1,0 +1,9 @@
+<stack>
+  <description brief="mav_tools">mav_tools</description>
+  <author>Maintained by Ivan Dryanovski</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/mav_tools</url>
+  <depend stack="ros" />
+
+</stack>
