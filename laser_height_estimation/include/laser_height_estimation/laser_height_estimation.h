@@ -40,18 +40,16 @@
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/Imu.h>
-
+#include <std_msgs/Float64.h>
+#include <mav_msgs/common.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
-
 #include <boost/thread/mutex.hpp>
 
-#include <std_msgs/Float64.h>
-
 const std::string scan_topic_                = "scan";
-const std::string height_to_base_topic_      = "height_to_base";
-const std::string height_to_footprint_topic_ = "height_to_footprint";
-const std::string imu_topic_                 = "imu";
+
+namespace mav
+{
 
 class LaserHeightEstimation
 {
@@ -100,6 +98,7 @@ class LaserHeightEstimation
     LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle nh_private);
     virtual ~LaserHeightEstimation();
 };
+}; // namespace mav
 
 #endif // LASER_HEIGHT_ESTIMATION_LASER_HEIGHT_ESTIMATION_H
 

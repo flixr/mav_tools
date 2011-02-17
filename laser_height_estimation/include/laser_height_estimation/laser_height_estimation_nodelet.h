@@ -42,14 +42,18 @@
 
 #include "laser_height_estimation/laser_height_estimation.h"
 
+namespace mav
+{
+
 class LaserHeightEstimationNodelet : public nodelet::Nodelet
 {
   public:
     virtual void onInit ();
 
   private:
-    LaserHeightEstimation * laser_height_estimation_;  // FIXME: change to smart pointer
+    mav::LaserHeightEstimation * laser_height_estimation_;  // FIXME: change to smart pointer
 };
 
+};
 
 #endif // LASER_HEIGHT_ESTIMATION_LASER_HEIGHT_ESTIMATION_NODELET_H

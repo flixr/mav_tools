@@ -36,11 +36,13 @@
 
 #include "laser_height_estimation/laser_height_estimation_nodelet.h"
 
+typedef mav::LaserHeightEstimationNodelet LaserHeightEstimationNodelet;
+
 PLUGINLIB_DECLARE_CLASS (
   laser_height_estimation, LaserHeightEstimationNodelet, 
   LaserHeightEstimationNodelet, nodelet::Nodelet);
 
-void LaserHeightEstimationNodelet::onInit ()
+void mav::LaserHeightEstimationNodelet::onInit ()
 {
   NODELET_INFO("Initializing LaserHeightEstimation Nodelet");
   
@@ -48,5 +50,5 @@ void LaserHeightEstimationNodelet::onInit ()
   ros::NodeHandle nh         = getMTNodeHandle();
   ros::NodeHandle nh_private = getMTPrivateNodeHandle();
 
-  laser_height_estimation_ = new LaserHeightEstimation(nh, nh_private);  
+  laser_height_estimation_ = new mav::LaserHeightEstimation(nh, nh_private);  
 }

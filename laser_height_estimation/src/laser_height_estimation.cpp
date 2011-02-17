@@ -36,6 +36,9 @@
 
 #include "laser_height_estimation/laser_height_estimation.h"
 
+namespace mav
+{
+
 LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle nh_private):
   nh_(nh), 
   nh_private_(nh_private)
@@ -67,15 +70,15 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   scan_subscriber_ = nh_.subscribe(
     scan_topic_, 5, &LaserHeightEstimation::scanCallback, this);
   imu_subscriber_ = nh_.subscribe(
-    imu_topic_, 5, &LaserHeightEstimation::imuCallback, this);
+    mav::IMU_TOPIC, 5, &LaserHeightEstimation::imuCallback, this);
 
   // **** publishers
 
   height_to_base_publisher_ = nh_.advertise<std_msgs::Float64>(
-    height_to_base_topic_, 5);
+    mav::HEIGHT_TO_BASE_TOPIC, 5);
 
   height_to_footprint_publisher_ = nh_.advertise<std_msgs::Float64>(
-    height_to_footprint_topic_, 5);
+    mav::HEIGHT_TO_FOOTPRINT_TOPIC, 5);
 }
 
 LaserHeightEstimation::~LaserHeightEstimation()
@@ -194,7 +197,7 @@ bool LaserHeightEstimation::setBaseToLaserTf(const sensor_msgs::LaserScanPtr& sc
   catch (tf::TransformException ex)
   {
     // transform unavailable - skip scan
-    ROS_WARN("LHE: Transform unavailable, skipping scan (%s)", ex.what());
+    ROS_WARN("Transform unavailable, skipping scan (%s)", ex.what());
     return false;
   }
   
@@ -214,7 +217,7 @@ bool LaserHeightEstimation::setBaseToLaserTf(const sensor_msgs::LaserScanPtr& sc
   catch (tf::TransformException ex)
   {
     // transform unavailable - skip scan
-    ROS_WARN("LHE: Transform unavailable, skipping scan (%s)", ex.what());
+    ROS_WARN("Transform unavailable, skipping scan (%s)", ex.what());
     return false;
   }
   
@@ -238,3 +241,4 @@ void LaserHeightEstimation::getStats(const std::vector<double> values, double& a
 
   stdev = sqrt(sumsq/values.size());
 }
+};// namespace mav
