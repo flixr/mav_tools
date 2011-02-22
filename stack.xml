@@ -1,6 +1,6 @@
 <stack>
   <description brief="mav_tools">Hardware-independent micro-air vehicle tools</description>
-  <author>Maintained by Ivan Dryanovski, William Morris!</author>
+  <author>Maintained by Ivan Dryanovski, William Morris</author>
   <license>BSD</license>  
   <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/mav_tools</url>
