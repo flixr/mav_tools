@@ -1,10 +1,10 @@
 <package>
-  <description brief="mav_msgs">
+  <description brief="Hardware-independent MAV messages">
 
      mav_msgs
 
   </description>
-  <author>Ivan Dryanovski</author>
+  <author>Ivan Dryanovski, William Morris</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/mav_msgs</url>
