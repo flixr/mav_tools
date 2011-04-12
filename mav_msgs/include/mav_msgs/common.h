@@ -45,11 +45,14 @@ const std::string ROS_NAMESPACE   = "mav";
 
 const std::string STATE_TOPIC         = "state";
 const std::string POSE_TOPIC          = "pose";
+const std::string VEL_X_TOPIC         = "vel_x";
+const std::string VEL_Y_TOPIC         = "vel_y";
 const std::string LASER_ODOM_TOPIC    = "laser_odom";
 const std::string IMU_TOPIC           = "imu";
 const std::string CMD_POSE_TOPIC      = "cmd_pose";
 const std::string CMD_VEL_TOPIC       = "cmd_vel";
 const std::string CMD_HEIGHT_TOPIC    = "cmd_height";
+
 const std::string CMD_THRUST_TOPIC    = "cmd_thrust";
 const std::string CMD_ROLL_TOPIC      = "cmd_roll";
 const std::string CMD_PITCH_TOPIC     = "cmd_pitch";
