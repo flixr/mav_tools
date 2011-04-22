@@ -42,6 +42,7 @@
 #include <sensor_msgs/Imu.h>
 #include <std_msgs/Float64.h>
 #include <mav_msgs/common.h>
+#include <mav_msgs/Height.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
 #include <boost/thread/mutex.hpp>
@@ -75,8 +76,8 @@ class LaserHeightEstimation
     btTransform base_to_footprint_;
     btTransform imu_transform_;
    
-    std_msgs::Float64Ptr height_to_base_msg_;
-    std_msgs::Float64Ptr height_to_footprint_msg_;
+    mav_msgs::HeightPtr height_to_base_msg_;
+    mav_msgs::HeightPtr height_to_footprint_msg_;
 
     // **** parameters
   
