@@ -52,6 +52,8 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   height_to_base_msg_      = boost::make_shared<mav_msgs::Height>();
   height_to_footprint_msg_ = boost::make_shared<mav_msgs::Height>();
 
+  ros::NodeHandle nh_mav (nh_, mav::ROS_NAMESPACE);
+
   // **** parameters
   
   if (!nh_private_.getParam ("base_frame", base_frame_))
@@ -69,15 +71,15 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
 
   scan_subscriber_ = nh_.subscribe(
     scan_topic_, 5, &LaserHeightEstimation::scanCallback, this);
-  imu_subscriber_ = nh_.subscribe(
+  imu_subscriber_ = nh_mav.subscribe(
     mav::IMU_TOPIC, 5, &LaserHeightEstimation::imuCallback, this);
 
   // **** publishers
 
-  height_to_base_publisher_ = nh_.advertise<mav_msgs::Height>(
+  height_to_base_publisher_ = nh_mav.advertise<mav_msgs::Height>(
     mav::HEIGHT_TO_BASE_TOPIC, 5);
 
-  height_to_footprint_publisher_ = nh_.advertise<mav_msgs::Height>(
+  height_to_footprint_publisher_ = nh_mav.advertise<mav_msgs::Height>(
     mav::HEIGHT_TO_FOOTPRINT_TOPIC, 5);
 }
 
