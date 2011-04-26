@@ -47,7 +47,7 @@
 #include <tf/transform_listener.h>
 #include <boost/thread/mutex.hpp>
 
-const std::string scan_topic_                = "scan";
+const std::string scan_topic_ = "scan";
 
 namespace mav
 {
