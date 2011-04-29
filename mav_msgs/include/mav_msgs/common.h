@@ -47,6 +47,7 @@ const std::string STATE_TOPIC         = "state";
 const std::string POSE_TOPIC          = "pose";
 const std::string VEL_X_TOPIC         = "vel_x";
 const std::string VEL_Y_TOPIC         = "vel_y";
+const std::string VEL_TOPIC           = "vel";
 const std::string LASER_ODOM_TOPIC    = "laser_odom";
 const std::string IMU_TOPIC           = "imu";
 const std::string CMD_POSE_TOPIC      = "cmd_pose";
