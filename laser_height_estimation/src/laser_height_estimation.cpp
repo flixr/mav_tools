@@ -171,16 +171,19 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     height_to_footprint += height_jump;
   }
 
+  double climb = height_to_base - prev_height_;
   prev_height_ = height_to_base;
 
   // **** publish height message
 
   height_to_base_msg_->height = height_to_base;
   height_to_base_msg_->height_variance = stdev_value;
+  height_to_base_msg_->climb = climb;
   height_to_base_msg_->header.stamp = scan_msg->header.stamp;
 
   height_to_footprint_msg_->height = height_to_footprint;
   height_to_footprint_msg_->height_variance = stdev_value;
+  height_to_footprint_msg_->climb = climb;
   height_to_footprint_msg_->header.stamp = scan_msg->header.stamp;
 
   height_to_base_publisher_.publish(height_to_base_msg_);
