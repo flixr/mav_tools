@@ -9,8 +9,10 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/mav_msgs</url>
 
+  <depend package="roscpp"/>
+
   <export>
-    <cpp cflags="-I${prefix}/include"/>
+    <cpp cflags="-I${prefix}/include -I${prefix}/msg_gen/cpp/include -I${prefix}/srv_gen/cpp/include"/>
   </export>
 
 </package>
