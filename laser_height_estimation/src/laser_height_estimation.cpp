@@ -146,7 +146,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
       ROS_WARN ("%s: Skipping scan (%s)", ros::this_node::getName().c_str(), ex.what ());
       return;
     }
-    world_to_base_ = world_to_base_tf;
+    world_to_base_.setRotation( world_to_base_tf.getRotation());
   }
 
   btTransform rotated_laser     = world_to_base_ * base_to_laser_;
