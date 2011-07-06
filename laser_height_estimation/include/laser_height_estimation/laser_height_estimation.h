@@ -74,18 +74,22 @@ class LaserHeightEstimation
 
     btTransform base_to_laser_;
     btTransform base_to_footprint_;
-    btTransform imu_transform_;
-   
+    btTransform world_to_base_;
+
+    sensor_msgs::Imu latest_imu_msg_;
+
     mav_msgs::HeightPtr height_to_base_msg_;
     mav_msgs::HeightPtr height_to_footprint_msg_;
 
     // **** parameters
-  
+
+    std::string world_frame_;
     std::string base_frame_;
     std::string footprint_frame_;
     int min_values_;
     double max_stdev_;
     double max_height_jump_;
+    bool use_imu_;
 
     // **** member functions
 
@@ -95,7 +99,7 @@ class LaserHeightEstimation
     void getStats(const std::vector<double> values, double& ave, double& stdev);
 
   public:
-  
+
     LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle nh_private);
     virtual ~LaserHeightEstimation();
 };

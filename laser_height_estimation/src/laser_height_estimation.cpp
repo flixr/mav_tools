@@ -55,7 +55,8 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   ros::NodeHandle nh_mav (nh_, mav::ROS_NAMESPACE);
 
   // **** parameters
-  
+  if (!nh_private_.getParam ("fixed_frame", world_frame_))
+      world_frame_ = "/world";
   if (!nh_private_.getParam ("base_frame", base_frame_))
     base_frame_ = "base_link";
   if (!nh_private_.getParam ("footprint_frame", footprint_frame_))
@@ -66,13 +67,18 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
     max_stdev_ = 0.10;
   if (!nh_private_.getParam ("max_height_jump", max_height_jump_))
     max_height_jump_ = 0.25;
-  
+  if (!nh_private_.getParam ("use_imu", use_imu_))
+    use_imu_ = true;
+
   // **** subscribers
 
   scan_subscriber_ = nh_.subscribe(
     scan_topic_, 5, &LaserHeightEstimation::scanCallback, this);
-  imu_subscriber_ = nh_mav.subscribe(
-    mav::IMU_TOPIC, 5, &LaserHeightEstimation::imuCallback, this);
+  if (use_imu_)
+  {
+    imu_subscriber_ = nh_.subscribe(
+      mav::IMU_TOPIC, 5, &LaserHeightEstimation::imuCallback, this);
+  }
 
   // **** publishers
 
@@ -90,9 +96,8 @@ LaserHeightEstimation::~LaserHeightEstimation()
 
 void LaserHeightEstimation::imuCallback (const sensor_msgs::ImuPtr& imu_msg)
 {
-  imu_transform_.setRotation(
-    btQuaternion(imu_msg->orientation.x, imu_msg->orientation.y,
-                 imu_msg->orientation.z, imu_msg->orientation.w));
+  latest_imu_msg_ = *imu_msg;
+
 /*
   double roll, pitch, yaw;
   btMatrix3x3 m(btQuaternion(
@@ -117,11 +122,38 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   // **** get required transforms
 
-  btTransform rotated_laser     = imu_transform_ * base_to_laser_;
-  btTransform rotated_footprint = imu_transform_ * base_to_footprint_;
- 
+  if(use_imu_)
+  {
+    world_to_base_.setIdentity();
+    btQuaternion q;
+    tf::quaternionMsgToTF(latest_imu_msg_.orientation, q);
+    world_to_base_.setRotation(q);
+  }
+  else
+  {
+    tf::StampedTransform world_to_base_tf;
+
+    try
+    {
+      tf_listener_.waitForTransform (
+        world_frame_, base_frame_, scan_msg->header.stamp, ros::Duration(0.5));
+      tf_listener_.lookupTransform (
+        world_frame_, base_frame_, scan_msg->header.stamp, world_to_base_tf);
+    }
+    catch (tf::TransformException ex)
+    {
+      // transform unavailable - skip scan
+      ROS_WARN ("%s: Skipping scan (%s)", ros::this_node::getName().c_str(), ex.what ());
+      return;
+    }
+    world_to_base_ = world_to_base_tf;
+  }
+
+  btTransform rotated_laser     = world_to_base_ * base_to_laser_;
+  btTransform rotated_footprint = world_to_base_ * base_to_footprint_;
+
   // **** get vector of height values
-  
+
   std::vector<double> values;
   for(unsigned int i = 0; i < scan_msg->ranges.size(); i++)
   {
