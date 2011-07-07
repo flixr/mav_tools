@@ -49,8 +49,6 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   floor_height_ = 0.0;
   prev_height_  = 0.0;
 
-  height_to_base_msg_      = boost::make_shared<mav_msgs::Height>();
-  height_to_footprint_msg_ = boost::make_shared<mav_msgs::Height>();
 
   ros::NodeHandle nh_mav (nh_, mav::ROS_NAMESPACE);
 
@@ -208,15 +206,19 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   // **** publish height message
 
+  height_to_base_msg_ = boost::make_shared<mav_msgs::Height>();
   height_to_base_msg_->height = height_to_base;
   height_to_base_msg_->height_variance = stdev_value;
   height_to_base_msg_->climb = climb;
   height_to_base_msg_->header.stamp = scan_msg->header.stamp;
+  height_to_base_msg_->header.frame_id = scan_msg->header.frame_id;
 
+  height_to_footprint_msg_ = boost::make_shared<mav_msgs::Height>();
   height_to_footprint_msg_->height = height_to_footprint;
   height_to_footprint_msg_->height_variance = stdev_value;
   height_to_footprint_msg_->climb = climb;
   height_to_footprint_msg_->header.stamp = scan_msg->header.stamp;
+  height_to_footprint_msg_->header.frame_id = scan_msg->header.frame_id;
 
   height_to_base_publisher_.publish(height_to_base_msg_);
   height_to_footprint_publisher_.publish(height_to_footprint_msg_);
