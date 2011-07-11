@@ -52,20 +52,15 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   ros::NodeHandle nh_mav (nh_, mav::ROS_NAMESPACE);
 
   // **** parameters
-  if (!nh_private_.getParam ("fixed_frame", world_frame_))
-      world_frame_ = "/world";
-  if (!nh_private_.getParam ("base_frame", base_frame_))
-    base_frame_ = "base_link";
-  if (!nh_private_.getParam ("footprint_frame", footprint_frame_))
-    footprint_frame_ = "base_footprint";
-  if (!nh_private_.getParam ("min_values", min_values_))
+  nh_private_.param("fixed_frame", world_frame_, std::string("/world"));
+  nh_private_.param("base_frame", base_frame_, std::string("base_link"));
+  nh_private_.param("footprint_frame", footprint_frame_, std::string("base_footprint"));
+  nh_private_.param("min_values", min_values_, 5);
+  if (min_values_ < 1)
     min_values_ = 5;
-  if (!nh_private_.getParam ("max_stdev", max_stdev_))
-    max_stdev_ = 0.10;
-  if (!nh_private_.getParam ("max_height_jump", max_height_jump_))
-    max_height_jump_ = 0.25;
-  if (!nh_private_.getParam ("use_imu", use_imu_))
-    use_imu_ = true;
+  nh_private_.param("max_stdev", max_stdev_, 0.1);
+  nh_private_.param("max_height_jump", max_height_jump_, 0.25);
+  nh_private_.param("use_imu", use_imu_, true);
 
   // **** subscribers
 
@@ -167,7 +162,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     }
   }
 
-  if (values.size() < min_values_)
+  if (values.size() < (unsigned int) min_values_)
   {
     ROS_WARN("%s: Not enough valid values to determine height, skipping (%d collected, %d needed)",
         ros::this_node::getName().c_str(), values.size(), min_values_);
