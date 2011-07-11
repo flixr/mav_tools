@@ -34,6 +34,7 @@
 Header header
 
 float64 height
+float64 height_agl
 float64 height_variance
 
 float64 climb
