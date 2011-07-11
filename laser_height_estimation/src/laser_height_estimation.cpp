@@ -215,6 +215,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
   mav_msgs::HeightPtr height_to_base_msg;
   height_to_base_msg = boost::make_shared<mav_msgs::Height>();
   height_to_base_msg->height = height_to_base;
+  height_to_base_msg->distance = height_to_base - floor_height_;
   height_to_base_msg->height_variance = stdev_value;
   height_to_base_msg->climb = climb;
   height_to_base_msg->header.stamp = scan_msg->header.stamp;
@@ -223,6 +224,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
   mav_msgs::HeightPtr height_to_footprint_msg;
   height_to_footprint_msg = boost::make_shared<mav_msgs::Height>();
   height_to_footprint_msg->height = height_to_footprint;
+  height_to_footprint_msg->distance = height_to_footprint - floor_height_;
   height_to_footprint_msg->height_variance = stdev_value;
   height_to_footprint_msg->climb = climb;
   height_to_footprint_msg->header.stamp = scan_msg->header.stamp;
