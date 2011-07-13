@@ -78,6 +78,8 @@ class LaserHeightEstimation
 
     sensor_msgs::Imu latest_imu_msg_;
 
+    ros::Time last_update_time_;
+
     // **** parameters
 
     std::string world_frame_;
