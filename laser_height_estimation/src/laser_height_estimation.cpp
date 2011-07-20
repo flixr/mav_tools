@@ -110,6 +110,9 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     // if tf is not available yet, skip this scan
     if (!setBaseToLaserTf(scan_msg)) return;
     initialized_ = true;
+
+    last_update_time_ = scan_msg->header.stamp;
+    return;
   }
 
   // **** get required transforms
@@ -195,8 +198,11 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     height_to_footprint += height_jump;
   }
 
-  double climb = height_to_base - prev_height_;
+  double dt = (scan_msg->header.stamp - last_update_time_).toSec();
+
+  double climb = (height_to_base - prev_height_)/dt;
   prev_height_ = height_to_base;
+  last_update_time_ = scan_msg->header.stamp;
 
   // **** publish height message
 
