@@ -127,7 +127,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
   else
   {
     tf::StampedTransform world_to_base_tf;
-
+    world_to_base_.setIdentity();
     try
     {
       tf_listener_.waitForTransform (
