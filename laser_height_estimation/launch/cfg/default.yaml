@@ -1,0 +1,4 @@
+fixed_frame: "world"
+base_frame: "pelican"
+footprint_frame: "footprint"
+use_imu: false
