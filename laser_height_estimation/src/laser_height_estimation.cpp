@@ -109,10 +109,8 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     // if this is the first scan, lookup the static base to laser tf
     // if tf is not available yet, skip this scan
     if (!setBaseToLaserTf(scan_msg)) return;
-    initialized_ = true;
 
     last_update_time_ = scan_msg->header.stamp;
-    return;
   }
 
   // **** get required transforms
@@ -190,9 +188,17 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   double height_jump = prev_height_ - height_to_base;
 
+  // only set initialized to true after prev_height_ is set to prevent waring about discontinuity at startup
+  if (!initialized_)
+  {
+    prev_height_ = height_to_base;
+    initialized_ = true;
+    return;
+  }
+
   if (fabs(height_jump) > max_height_jump_)
   {
-    ROS_WARN("%s: Laser Height Estimation: Floor Discontinuity detected", ros::this_node::getName().c_str());
+    ROS_WARN("%s: Laser Height Estimation: Floor Discontinuity detected: %f m", ros::this_node::getName().c_str(), height_jump);
     floor_height_ += height_jump;
     height_to_base += height_jump;
     height_to_footprint += height_jump;
