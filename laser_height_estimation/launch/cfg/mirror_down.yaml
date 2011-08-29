@@ -1,0 +1,7 @@
+fixed_frame: "world"
+base_frame: "pelican"
+footprint_frame: "footprint"
+use_imu: false
+max_height_jump: 0.2
+max_stdev: 0.1
+min_values: 3
