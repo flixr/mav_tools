@@ -43,7 +43,7 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
   nh_(nh),
   nh_private_(nh_private)
 {
-  ROS_INFO("%s: Starting LaserHeightEstimation",  ros::this_node::getName().c_str());
+  ROS_INFO("Starting LaserHeightEstimation");
 
   initialized_  = false;
   floor_height_ = 0.0;
@@ -83,7 +83,7 @@ LaserHeightEstimation::LaserHeightEstimation(ros::NodeHandle nh, ros::NodeHandle
 
 LaserHeightEstimation::~LaserHeightEstimation()
 {
-  ROS_INFO("%s: Destroying LaserHeightEstimation", ros::this_node::getName().c_str());
+  ROS_INFO("Destroying LaserHeightEstimation");
 }
 
 void LaserHeightEstimation::imuCallback (const sensor_msgs::ImuPtr& imu_msg)
@@ -136,7 +136,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     catch (tf::TransformException ex)
     {
       // transform unavailable - skip scan
-      ROS_WARN ("%s: Skipping scan (%s)", ros::this_node::getName().c_str(), ex.what ());
+      ROS_WARN ("Skipping scan (%s)", ex.what ());
       return;
     }
     world_to_base_.setRotation( world_to_base_tf.getRotation());
@@ -162,8 +162,8 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   if (values.size() < (unsigned int) min_values_)
   {
-    ROS_WARN("%s: Not enough valid values to determine height, skipping (%d collected, %d needed)",
-        ros::this_node::getName().c_str(), values.size(), min_values_);
+    ROS_WARN("Not enough valid values to determine height, skipping (%d collected, %d needed)",
+        values.size(), min_values_);
     return;
   }
 
@@ -174,8 +174,8 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   if (stdev_value > max_stdev_)
   {
-    ROS_WARN("%s: Stdev of height readings too big to determine height, skipping (stdev is %f, max is %f)",
-        ros::this_node::getName().c_str(), stdev_value, max_stdev_);
+    ROS_WARN("Stdev of height readings too big to determine height, skipping (stdev is %f, max is %f)",
+        stdev_value, max_stdev_);
     return;
   }
 
@@ -198,7 +198,7 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
 
   if (fabs(height_jump) > max_height_jump_)
   {
-    ROS_WARN("%s: Laser Height Estimation: Floor Discontinuity detected: %f m", ros::this_node::getName().c_str(), height_jump);
+    ROS_WARN("Laser Height Estimation: Floor Discontinuity detected: %f m", height_jump);
     floor_height_ += height_jump;
     height_to_base += height_jump;
     height_to_footprint += height_jump;
@@ -252,7 +252,7 @@ bool LaserHeightEstimation::setBaseToLaserTf(const sensor_msgs::LaserScanPtr& sc
   catch (tf::TransformException ex)
   {
     // transform unavailable - skip scan
-    ROS_WARN("%s: Transform unavailable, skipping scan (%s)", ros::this_node::getName().c_str(), ex.what());
+    ROS_WARN("Transform unavailable, skipping scan (%s)", ex.what());
     return false;
   }
 
@@ -272,7 +272,7 @@ bool LaserHeightEstimation::setBaseToLaserTf(const sensor_msgs::LaserScanPtr& sc
   catch (tf::TransformException ex)
   {
     // transform unavailable - skip scan
-    ROS_WARN("%s: Transform unavailable, skipping scan (%s)", ros::this_node::getName().c_str(), ex.what());
+    ROS_WARN("Transform unavailable, skipping scan (%s)", ex.what());
     return false;
   }
 
