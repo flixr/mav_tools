@@ -1,4 +1,5 @@
-fixed_frame: "world"
+fixed_frame: "nav"
 base_frame: "pelican"
 footprint_frame: "footprint"
 use_imu: false
+min_values: 1
