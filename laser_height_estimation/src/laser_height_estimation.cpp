@@ -111,7 +111,6 @@ void LaserHeightEstimation::scanCallback (const sensor_msgs::LaserScanPtr& scan_
     if (!setBaseToLaserTf(scan_msg)) return;
 
     last_update_time_ = scan_msg->header.stamp;
-    return;
   }
 
   // **** get required transforms
