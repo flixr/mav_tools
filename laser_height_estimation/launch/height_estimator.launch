@@ -1,0 +1,7 @@
+<launch>
+
+	<node pkg="laser_height_estimation" type="laser_height_estimator" name="laser_height_estimator" output="screen">
+		<rosparam file="$(find laser_height_estimation)/launch/cfg/mirror_down.yaml"/>
+	</node>
+
+</launch>
