@@ -14,16 +14,9 @@ rosbuild_init()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-# create laser_height_estimation library
-
-rosbuild_add_library (laser_height_estimation src/laser_height_estimation.cpp)
-
 # create laser_height_estimation_nodelet library
+rosbuild_add_library (laser_height_estimation src/laser_height_estimation_nodelet.cpp)
 
-rosbuild_add_library (laser_height_estimation_nodelet src/laser_height_estimation_nodelet.cpp)
-target_link_libraries (laser_height_estimation_nodelet laser_height_estimation)
 
-# create laser_height_estimation executable
-
-rosbuild_add_executable(laser_height_estimation_node src/laser_height_estimation_node.cpp)
-target_link_libraries (laser_height_estimation_node laser_height_estimation)
+# create laser_height_estimator executable
+rosbuild_add_executable(laser_height_estimator src/laser_height_estimation_node.cpp)

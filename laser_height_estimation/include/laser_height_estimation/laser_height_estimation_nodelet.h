@@ -37,23 +37,75 @@
 #ifndef LASER_HEIGHT_ESTIMATION_LASER_HEIGHT_ESTIMATION_NODELET_H
 #define LASER_HEIGHT_ESTIMATION_LASER_HEIGHT_ESTIMATION_NODELET_H
 
+#include <ros/ros.h>
 #include <nodelet/nodelet.h>
-#include <pluginlib/class_list_macros.h>
 
-#include "laser_height_estimation/laser_height_estimation.h"
+#include <sensor_msgs/LaserScan.h>
+#include <sensor_msgs/Imu.h>
+#include <std_msgs/Float64.h>
+#include <mav_msgs/common.h>
+#include <mav_msgs/Height.h>
+#include <tf/transform_datatypes.h>
+#include <tf/transform_listener.h>
+#include <boost/thread/mutex.hpp>
+
+const std::string scan_topic_ = "scan";
 
 namespace mav
 {
 
 class LaserHeightEstimationNodelet : public nodelet::Nodelet
 {
-  public:
+  private:
+
+    // **** ros-related variables
+
+    ros::NodeHandle nh_;
+    ros::NodeHandle nh_private_;
+    ros::Subscriber imu_subscriber_;
+    ros::Subscriber scan_subscriber_;
+    ros::Publisher  height_to_base_publisher_;
+    ros::Publisher  height_to_footprint_publisher_;
+    tf::TransformListener tf_listener_;
+
+    // **** state variables
+
+    bool initialized_;
+    double floor_height_;
+    double prev_height_;
+
+    btTransform base_to_laser_;
+    btTransform base_to_footprint_;
+    btTransform world_to_base_;
+
+    sensor_msgs::Imu latest_imu_msg_;
+
+    ros::Time last_update_time_;
+
+    // **** parameters
+
+    std::string world_frame_;
+    std::string base_frame_;
+    std::string footprint_frame_;
+    int min_values_;
+    double max_stdev_;
+    double max_height_jump_;
+    bool use_imu_;
+
+    // **** member functions
+
+    void scanCallback (const sensor_msgs::LaserScanPtr& scan_msg);
+    void imuCallback  (const sensor_msgs::ImuPtr&       imu_msg);
+    bool setBaseToLaserTf(const sensor_msgs::LaserScanPtr& scan_msg);
+    void getStats(const std::vector<double> values, double& ave, double& stdev);
+
     virtual void onInit ();
 
-  private:
-    mav::LaserHeightEstimation * laser_height_estimation_;  // FIXME: change to smart pointer
-};
+  public:
+    LaserHeightEstimationNodelet();
 
 };
+}; // namespace mav
 
 #endif // LASER_HEIGHT_ESTIMATION_LASER_HEIGHT_ESTIMATION_NODELET_H
+

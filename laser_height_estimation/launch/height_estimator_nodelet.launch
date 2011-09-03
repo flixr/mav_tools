@@ -1,0 +1,11 @@
+<launch>
+
+	<!-- nodelet manager process -->
+  	<node pkg="nodelet" type="nodelet" name="height_nodelet_manager" args="manager" output="screen"/>
+
+	<node pkg="nodelet" type="nodelet" name="laser_height_estimator" output="screen"
+      args="load laser_height_estimation/LaserHeightEstimationNodelet height_nodelet_manager">
+		<rosparam file="$(find laser_height_estimation)/launch/cfg/mirror_down.yaml"/>
+	</node>
+
+</launch>
